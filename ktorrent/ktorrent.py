@@ -18,11 +18,10 @@ class Filter:
     """Keys and Args Filter"""
     # Torrent result keys
     KEYS = ['name', 'web', 'link', 'magnet', 'verified', 'category', 'size',
-            'files', 'age', 'seed', 'leech']
+            'age', 'seed', 'leech']
     # Function args
     FIELD = {
         'size': 'size',
-        'files': 'files_count',
         'age': 'time_add',
         'seed': 'seeders',
         'leech': 'leechers'
@@ -40,7 +39,11 @@ def request(url):
     except:
         return Status.TIMEOUT
 
-    soup = BeautifulSoup(response.text, "html.parser")
+    # This is a very ugly hack to remove the stray closing span tag currently
+    # present in the size field which breaks the HTML parser.
+    html = response.text.replace('B </span>', 'B')
+
+    soup = BeautifulSoup(html, "html.parser")
     rows = soup.select('[id^=torrent_]')
     rows_found = len(rows)
 
@@ -64,7 +67,7 @@ def request(url):
 
             row_data = [name, web, link, magnet, verified, category]
 
-            for i in range(1, 6):
+            for i in range(1, 5):
                 row_data.append(cols[i].text.strip())
 
             # Zip keys with values
@@ -76,7 +79,7 @@ def request(url):
 
         # Calculate total pages
         pager = soup.select('.pages a')
-        total_pages = 1 if len(pager) == 0 else int(pager[- 1].text)
+        total_pages = 1 if len(pager) == 1 else int(pager[- 1].text)
 
         # find page number
         page = url.split('/')
