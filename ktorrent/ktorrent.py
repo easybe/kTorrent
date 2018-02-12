@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 
 # Base search link
-BASE_LINK = 'https://kat.cr'
+BASE_LINK = 'https://kickass.cd'
 
 
 class Status:
