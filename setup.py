@@ -11,8 +11,8 @@ setup(
     url='https://github.com/codenirvana/kTorrent',
     packages=['ktorrent'],
     install_requires=[
-        "beautifulsoup4==4.4.1",
-        "requests==2.8.1"
+        "beautifulsoup4>=4.4.1",
+        "requests>=2.8.1"
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
